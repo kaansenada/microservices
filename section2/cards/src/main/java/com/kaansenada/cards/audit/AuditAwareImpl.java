@@ -9,7 +9,6 @@ import java.util.Optional;
 @Component("auditAwareImpl")
 public class AuditAwareImpl implements AuditorAware<String> {
     @Override
-    @NotNull
     public Optional<String> getCurrentAuditor() {
         return Optional.of("CARD_MS");
     }
