@@ -1,0 +1,37 @@
+services:
+  account:
+    image: "kaansenada/accounts:s2"
+    container_name: "accounts-ms"
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - "microservices-network"
+  loan:
+    image: "kaansenada/loans:s2"
+    container_name: "loans-ms"
+    ports:
+      - "8090:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - "microservices-network"
+  card:
+    image: "kaansenada/cards:s2"
+    container_name: "cards-ms"
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - "microservices-network"
+networks:
+  microservices-network:
+    driver: bridge
