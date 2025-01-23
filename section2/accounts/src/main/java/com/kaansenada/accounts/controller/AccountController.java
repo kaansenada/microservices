@@ -6,29 +6,31 @@ import com.kaansenada.accounts.enums.AccountEnum;
 import com.kaansenada.accounts.service.IAccountService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api",produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
+@RequiredArgsConstructor
 public class AccountController  {
+
+    @Autowired
     private IAccountService accountService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@Valid@RequestBody CustomerDto customerDto) {
@@ -80,6 +82,19 @@ public class AccountController  {
         }
     }
 
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
+    @GetMapping("/java-info")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("MAVEN_HOME"));
+    }
 
 }
 
